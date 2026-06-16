@@ -19,9 +19,15 @@ class CustomerService {
       }).toList(),
     );
   }
-  Future<void> updateCustomer(Customer customer) async {
-  await customers.doc(customer.id).update(
-    customer.toMap(),
-  );
-}
+
+    Future<void> updateCustomer(Customer customer) async {
+    await customers.doc(customer.id).update(
+        customer.toMap(),
+    );
+    }
+    
+    Future<void> deleteCustomer(String customerId) async {
+    await customers.doc(customerId).delete();
+    }
+
 }

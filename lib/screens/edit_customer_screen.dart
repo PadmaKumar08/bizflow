@@ -44,6 +44,44 @@ class _EditCustomerScreenState
         TextEditingController(text: widget.customer.company);
   }
 
+  Future<void> deleteCustomer() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Customer'),
+          content: Text(
+            'Delete ${widget.customer.name}?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      await customerService.deleteCustomer(
+        widget.customer.id,
+      );
+
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    }
+  }
+
   Future<void> updateCustomer() async {
     final updatedCustomer = Customer(
       id: widget.customer.id,
@@ -109,15 +147,31 @@ class _EditCustomerScreenState
 
             const SizedBox(height: 20),
 
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: updateCustomer,
-                child: const Text(
-                  'Update Customer',
+            Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: updateCustomer,
+                    child: const Text(
+                      'Update Customer',
+                    ),
+                  ),
                 ),
-              ),
-            ),
+
+                const SizedBox(height: 10),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: deleteCustomer,
+                    child: const Text(
+                      'Delete Customer',
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

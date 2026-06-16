@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'firebase_options.dart';
-import 'screens/register_screen.dart';
 import 'screens/login_screen.dart';
-import 'screens/add_customer_screen.dart';
-import 'screens/customer_list_screen.dart';
+import 'screens/dashboard_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -23,7 +23,9 @@ class BizFlowApp extends StatelessWidget {
     return MaterialApp(
       title: 'BizFlow',
       debugShowCheckedModeBanner: false,
-      home: CustomerListScreen(),
+      home: FirebaseAuth.instance.currentUser != null
+          ? DashboardScreen()
+          : LoginScreen(),
     );
   }
 }
